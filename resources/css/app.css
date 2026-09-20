@@ -1,0 +1,90 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=Inter:wght@400;500;600&display=swap");
+
+@import "tailwindcss";
+
+:root {
+    --background: #f5f1ea;
+    --surface: #ffffff;
+
+    --glass-surface: rgba(255, 255, 255, 0.55);
+    --glass-border: rgba(255, 255, 255, 0.35);
+
+    --primary: #c2632a;
+    --primary-hover: #a34f1e;
+
+    --secondary: #2b2724;
+    --muted: #6b6560;
+
+    --on-primary: #ffffff;
+    --on-surface: #2b2724;
+
+    --shadow: rgba(43, 39, 36, 0.12);
+
+    --income: #4b7b5d;
+    --income-soft: rgba(75, 123, 93, 0.12);
+
+    --expense: #b54a3f;
+    --expense-soft: rgba(181, 74, 63, 0.12);
+
+    --saving: #3b6e71;
+    --saving-soft: rgba(59, 110, 113, 0.12);
+
+    --shadow-card: 0 8px 32px var(--shadow);
+    --shadow-modal: 0 16px 48px var(--shadow);
+
+    --font-body: "Inter", sans-serif;
+    --font-heading: "Fraunces", serif;
+}
+
+.dark {
+    --background: #171412;
+    --surface: #211d1a;
+
+    --glass-surface: rgba(33, 29, 26, 0.55);
+    --glass-border: rgba(255, 255, 255, 0.08);
+
+    --primary: #e08544;
+    --primary-hover: #f2a066;
+
+    --secondary: #f5f1ea;
+    --muted: #a39c94;
+
+    --on-primary: #171412;
+    --on-surface: #f5f1ea;
+
+    --shadow: rgba(0, 0, 0, 0.45);
+
+    --income: #7fb690;
+    --income-soft: rgba(127, 182, 144, 0.14);
+
+    --expense: #d97364;
+    --expense-soft: rgba(217, 115, 100, 0.14);
+
+    --saving: #6fa8ab;
+    --saving-soft: rgba(111, 168, 171, 0.14);
+
+    --shadow-card: 0 8px 32px var(--shadow);
+    --shadow-modal: 0 16px 48px var(--shadow);
+}
+
+html {
+    font-family: var(--font-body);
+}
+
+body {
+    margin: 0;
+    background: var(--background);
+    color: var(--on-surface);
+}
+
+.font-heading {
+    font-family: var(--font-heading);
+}
+
+button,
+a,
+input,
+textarea,
+select {
+    font-family: inherit;
+}
