@@ -50,10 +50,40 @@ export function useSweetAlert() {
         });
     }, []);
 
+    const confirm = useCallback(
+        async ({
+            title = "Apakah Anda yakin?",
+            text = "Data yang dihapus tidak dapat dikembalikan!",
+            confirmButtonText = "Ya, Hapus!",
+            cancelButtonText = "Batal",
+        }: {
+            title?: string;
+            text?: string;
+            confirmButtonText?: string;
+            cancelButtonText?: string;
+        } = {}) => {
+            const result = await Swal.fire({
+                title,
+                text,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#B54A3F",
+                cancelButtonColor: "#6B6560",
+                confirmButtonText,
+                cancelButtonText,
+                reverseButtons: true,
+            });
+
+            return result.isConfirmed;
+        },
+        [],
+    );
+
     return {
         success,
         error,
         warning,
         info,
+        confirm,
     };
 }

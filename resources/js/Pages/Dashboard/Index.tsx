@@ -1,8 +1,8 @@
 import { Head, usePage } from "@inertiajs/react";
 import { useEffect } from "react";
 import Swal from "sweetalert2";
-import AppLayout from "../../Components/Layouts/AppLayout";
-import { useSweetAlert } from "../../Hooks/useSweetAlert";
+import AppLayout from "@/Components/Layouts/AppLayout";
+import { useSweetAlert } from "@/Hooks/useSweetAlert";
 
 type PageProps = {
     flash: {

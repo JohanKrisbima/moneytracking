@@ -12,7 +12,8 @@ export default function Card({
                 border
                 border-white/35
                 bg-white/55
-                p-6
+                p-4
+                sm:p-6
                 shadow-[0_8px_32px_rgba(0,0,0,0.06)]
                 backdrop-blur-[16px]
                 ${className}
