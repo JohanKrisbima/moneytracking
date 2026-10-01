@@ -1,58 +1,176 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 💰 MoneyTrack - Personal Finance Management
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://img.shields.io/badge/Laravel-12.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel 12" />
+  <img src="https://img.shields.io/badge/React-19.x-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19" />
+  <img src="https://img.shields.io/badge/Inertia.js-v2-9553E9?style=for-the-badge&logo=inertia&logoColor=white" alt="Inertia.js" />
+  <img src="https://img.shields.io/badge/TypeScript-Ready-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/TailwindCSS-v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS v4" />
 </p>
 
-## About Laravel
+**MoneyTrack** adalah aplikasi pencatatan keuangan pribadi modern berbasis web yang dibangun dengan pendekatan **Single Page Application (SPA)** menggunakan **Laravel 12**, **Inertia.js**, **React 19**, dan **TypeScript**. Aplikasi ini mengusung antarmuka premium bertema *modern glassmorphism* dengan responsivitas tinggi di berbagai perangkat (Desktop & Mobile).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🌟 Fitur Utama (Current Features)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 1. 🔐 Autentikasi & Keamanan
+- Sistem login aman dengan proteksi session dan middleware `auth` & `guest`.
+- Multi-user isolation: seluruh data dompet, kategori, dan transaksi terikat kuat pada `user_id` yang sedang login.
 
-## Learning Laravel
+### 2. 💳 Manajemen Dompet (Wallets - `/wallets`)
+- **CRUD Lengkap**: Tambah, edit, dan hapus dompet sumber dana.
+- **Multi-Tipe Dompet**: Mendukung tipe `Bank`, `E-Wallet`, `Cash (Uang Fisik)`, dan `Tabungan`.
+- **DataTable Canggih**:
+  - Pencarian realtime berbasis *debounce* pada nama dan tipe.
+  - Sorting multi-arah (*Ascending*, *Descending*, *Reset*).
+  - Filter cepat berbasis tab kategori dompet.
+  - Paginasi data dinamis.
+  - Responsif mobile: tabel dapat di-*scroll* horizontal dengan nyaman di layar HP.
+- **Proteksi Relasi**: Dompet yang sudah memiliki riwayat transaksi/transfer dicegah dari penghapusan demi integritas data keuangan.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 3. 🏷️ Manajemen Kategori (Categories - `/categories`)
+- **CRUD Lengkap**: Tambah, edit, dan hapus pos pemasukan dan pengeluaran.
+- **Tipe Kategori**: 
+  - `expense` (Pengeluaran) dengan tema visual mawar/rose lembut.
+  - `income` (Pemasukan) dengan tema visual emerald/hijau segar.
+- **Validasi Cerdas**: Mencegah duplikasi nama kategori untuk tipe yang sama pada user yang sama.
+- **Penguncian Tipe saat Edit**: Mencegah perubahan tipe kategori secara tidak sengaja untuk menjaga konsistensi transaksi historis.
+- **Proteksi Transaksi**: Kategori yang sedang digunakan pada tabel transaksi dilindungi dari penghapusan.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 4. 🎨 Komponen UI Reusable & Glassmorphic Design
+- **Komponen Tabel Terstruktur**: `DataTable`, `DataTablePagination`, dan `DataTableFilterTabs`.
+- **Komponen Form & Modal**: `Modal`, `Input`, `Select` (dengan fitur pencarian Select2 popover), dan `Button`.
+- **SweetAlert2 Feedback**: Notifikasi toast dan modal dialog konfirmasi hapus data yang interaktif.
+- **Layout Responsif**: Sidebar melayang bergaya kaca (*frosted glass*), Navbar modern, dan Card berbayang halus.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+---
 
-## Agentic Development
+## 🛠️ Tech Stack
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+| Layer | Teknologi |
+| :--- | :--- |
+| **Backend Framework** | [Laravel 12](https://laravel.com/) (PHP 8.3+) |
+| **Frontend Adapter** | [Inertia.js v2](https://inertiajs.com/) |
+| **Frontend Library** | [React 19](https://react.dev/) & [TypeScript](https://www.typescriptlang.org/) |
+| **Styling** | [Tailwind CSS v4](https://tailwindcss.com/) |
+| **Table Engine** | [TanStack Table v8](https://tanstack.com/table) |
+| **Icons** | [Lucide React](https://lucide.dev/) |
+| **Alerts & Dialogs** | [SweetAlert2](https://sweetalert2.github.io/) |
+| **Build Tool** | [Vite 8](https://vitejs.dev/) |
 
-```bash
-composer require laravel/boost --dev
+---
 
-php artisan boost:install
+## 📁 Struktur Direktori Penting
+
+```text
+moneytrack-api/
+├── app/
+│   ├── Http/Controllers/
+│   │   ├── CategoryController.php   # Logika CRUD Kategori (Index, Store, Update, Destroy)
+│   │   ├── WalletController.php     # Logika CRUD Wallet
+│   │   └── Auth/LoginController.php # Autentikasi Pengguna
+│   └── Models/
+│       ├── Category.php             # Relasi User & Transaksi
+│       ├── Wallet.php               # Relasi User, Transaksi, & Transfer
+│       ├── Transaction.php          # Transaksi Keuangan
+│       └── User.php                 # Relasi Sentral Pengguna
+├── resources/
+│   └── js/
+│       ├── Components/
+│       │   ├── Category/            # CategoryColumns.tsx, CategoryFormModal.tsx
+│       │   ├── Wallet/              # WalletColumns.tsx, WalletFormModal.tsx
+│       │   ├── UI/                  # DataTable, Button, Input, Modal, Select, Card
+│       │   └── Layouts/             # AppLayout, Sidebar, Navbar
+│       ├── Hooks/
+│       │   └── useSweetAlert.ts     # Hook reusable SweetAlert2
+│       ├── Pages/
+│       │   ├── Categories/Index.tsx # Halaman Utama Kategori
+│       │   ├── Wallets/Index.tsx    # Halaman Utama Dompet
+│       │   └── Dashboard/Index.tsx  # Halaman Dashboard
+│       └── Types/
+│           ├── category.ts          # Definisi Tipe TypeScript Kategori
+│           └── wallet.ts            # Definisi Tipe TypeScript Wallet
+└── routes/
+    └── web.php                      # Definisi Web & Resource Routing
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## 🚀 Panduan Instalasi & Menjalankan Project
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 1. Prasyarat Sistem
+- PHP >= 8.3
+- Composer >= 2.x
+- Node.js >= 20.x & npm
+- PostgreSQL atau MySQL
 
-## Code of Conduct
+### 2. Kloning & Instalasi Dependensi
+```bash
+# Clone repositori
+git clone https://github.com/JohanKrisbima/moneytracking.git
+cd moneytrack-api
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# Install dependensi PHP (Composer)
+composer install
 
-## Security Vulnerabilities
+# Install dependensi JavaScript (npm)
+npm install
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 3. Konfigurasi Environment
+```bash
+# Salin file environment
+cp .env.example .env
 
-## License
+# Generate application key
+php artisan key:generate
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Sesuaikan konfigurasi database pada berkas `.env`:
+```env
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=moneytrack
+DB_USERNAME=postgres
+DB_PASSWORD=your_password
+```
+
+### 4. Migrasi Database
+```bash
+php artisan migrate
+```
+
+### 5. Menjalankan Server Development
+Buka 2 terminal terpisah atau jalankan script development:
+
+**Terminal 1 (Backend Laravel):**
+```bash
+php artisan serve
+```
+
+**Terminal 2 (Frontend Vite):**
+```bash
+npm run dev
+```
+
+Aplikasi siap diakses di peramban: `http://localhost:8000`
+
+---
+
+## 🗺️ Roadmap Pengembangan Selanjutnya
+
+- [x] Otentikasi Pengguna & Dashboard Layout
+- [x] Modul Wallet (Dompet / Sumber Rekening)
+- [x] Modul Kategori (Pos Pengeluaran & Sumber Pemasukan)
+- [ ] Modul Pencatatan Transaksi (`/transactions`)
+- [ ] Modul Anggaran / Uang Bulanan (`/monthly-incomes`)
+- [ ] Modul Transfer Antar-Dompet (`/transfers`)
+- [ ] Grafik Analisis & Laporan Ringkasan Pengeluaran (`/summary`)
+- [ ] Fitur Ekspor Laporan (Excel / PDF)
+
+---
+
+## 📄 Lisensi
+Project ini dikembangkan secara open-source di bawah lisensi [MIT License](LICENSE).
