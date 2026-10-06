@@ -9,6 +9,7 @@ import {
     Settings,
     Tags,
     Wallet,
+    ArrowLeftRight,
 } from "lucide-react";
 
 type MenuItem = {
@@ -54,6 +55,11 @@ const menuSections: MenuSection[] = [
                 label: "Transaksi",
                 href: "/transactions",
                 icon: CreditCard,
+            },
+            {
+                label: "Transfer",
+                href: "/transfers",
+                icon: ArrowLeftRight,
             },
             {
                 label: "Kategori",

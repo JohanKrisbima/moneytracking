@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\TransferController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\WalletController;
@@ -39,5 +41,11 @@ Route::middleware('auth')->group(function () {
         ]);
     
     Route::resource('categories', CategoryController::class)
+        ->only(['index', 'store', 'update', 'destroy']);
+
+    Route::resource('transactions', TransactionController::class)
+        ->only(['index', 'store', 'update', 'destroy']);
+
+     Route::resource('transfers', TransferController::class)
         ->only(['index', 'store', 'update', 'destroy']);
 });
