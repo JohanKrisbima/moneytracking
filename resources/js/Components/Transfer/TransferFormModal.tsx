@@ -8,6 +8,7 @@ import Select from "@/Components/UI/Select";
 
 import type { Transfer, TransferForm } from "@/Types/transfer";
 import type { Wallet } from "@/Types/wallet";
+import { formatRupiah } from "@/Utils/currency";
 
 type TransferFormModalProps = {
     isOpen: boolean;
@@ -34,10 +35,10 @@ export default function TransferFormModal({
             description: "",
         });
 
-    // Opsi Dompet Asal (Semua dompet)
+    // Opsi Dompet Asal (Semua dompet beserta saldonya)
     const fromWalletOptions = useMemo(() => {
         return wallets.map((w) => ({
-            label: `${w.name} (${w.type.toUpperCase()})`,
+            label: `${w.name} (${w.type.toUpperCase()})${w.balance !== undefined ? ` • ${formatRupiah(w.balance)}` : ""}`,
             value: String(w.id),
         }));
     }, [wallets]);
@@ -47,9 +48,14 @@ export default function TransferFormModal({
         return wallets
             .filter((w) => String(w.id) !== String(data.from_wallet_id))
             .map((w) => ({
-                label: `${w.name} (${w.type.toUpperCase()})`,
+                label: `${w.name} (${w.type.toUpperCase()})${w.balance !== undefined ? ` • ${formatRupiah(w.balance)}` : ""}`,
                 value: String(w.id),
             }));
+    }, [wallets, data.from_wallet_id]);
+
+    // Dompet Asal yang sedang aktif dipilih
+    const selectedFromWallet = useMemo(() => {
+        return wallets.find((w) => String(w.id) === String(data.from_wallet_id));
     }, [wallets, data.from_wallet_id]);
 
     useEffect(() => {
@@ -107,21 +113,31 @@ export default function TransferFormModal({
         >
             <form onSubmit={handleSubmit} className="space-y-4">
                 {/* 1. Dompet Asal (Pengirim) */}
-                <Select
-                    label="Dompet Asal (Sumber Dana)"
-                    name="from_wallet_id"
-                    value={String(data.from_wallet_id)}
-                    onChange={(e) => {
-                        setData("from_wallet_id", e.target.value);
-                        // Jika dompet tujuan kebetulan sama dengan asal yang baru dipilih, reset tujuan
-                        if (String(data.to_wallet_id) === e.target.value) {
-                            setData("to_wallet_id", "");
-                        }
-                    }}
-                    options={fromWalletOptions}
-                    placeholder="Pilih dompet asal..."
-                    error={errors.from_wallet_id}
-                />
+                <div className="space-y-1">
+                    <Select
+                        label="Dompet Asal (Sumber Dana)"
+                        name="from_wallet_id"
+                        value={String(data.from_wallet_id)}
+                        onChange={(e) => {
+                            setData("from_wallet_id", e.target.value);
+                            // Jika dompet tujuan kebetulan sama dengan asal yang baru dipilih, reset tujuan
+                            if (String(data.to_wallet_id) === e.target.value) {
+                                setData("to_wallet_id", "");
+                            }
+                        }}
+                        options={fromWalletOptions}
+                        placeholder="Pilih dompet asal..."
+                        error={errors.from_wallet_id}
+                    />
+                    {selectedFromWallet && selectedFromWallet.balance !== undefined && (
+                        <p className="text-xs text-[#6B6560]">
+                            Saldo tersedia:{" "}
+                            <span className="font-semibold text-[#2B2724]">
+                                {formatRupiah(selectedFromWallet.balance)}
+                            </span>
+                        </p>
+                    )}
+                </div>
 
                 {/* 2. Dompet Tujuan (Penerima) */}
                 <Select

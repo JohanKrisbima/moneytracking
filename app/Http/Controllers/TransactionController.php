@@ -6,6 +6,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class TransactionController extends Controller
 {
@@ -122,6 +123,16 @@ class TransactionController extends Controller
             'amount.min'         => 'Nominal transaksi minimal Rp 1.',
         ]);
 
+        // Cek jika tipe pengeluaran (expense), pastikan saldo dompet mencukupi
+        if ($validatedData['type'] === 'expense') {
+            $wallet = $request->user()->wallets()->findOrFail($validatedData['wallet_id']);
+            if ((float) $validatedData['amount'] > (float) $wallet->balance) {
+                throw ValidationException::withMessages([
+                    'amount' => 'Saldo dompet tidak mencukupi untuk pengeluaran ini (Saldo saat ini: Rp ' . number_format($wallet->balance, 0, ',', '.') . ').',
+                ]);
+            }
+        }
+
         try {
             $request->user()
                 ->transactions()
@@ -176,6 +187,27 @@ class TransactionController extends Controller
             'category_id.exists' => 'Kategori tidak sesuai dengan tipe transaksi.',
             'amount.min'         => 'Nominal transaksi minimal Rp 1.',
         ]);
+
+        // Cek jika tipe pengeluaran (expense), pastikan saldo dompet mencukupi
+        if ($validatedData['type'] === 'expense') {
+            $wallet = $request->user()->wallets()->findOrFail($validatedData['wallet_id']);
+            $availableBalance = (float) $wallet->balance;
+
+            // Jika transaksi lama menggunakan dompet yang sama, kembalikan efek transaksi lama untuk kalkulasi
+            if ((int) $transaction->wallet_id === (int) $wallet->id) {
+                if ($transaction->type === 'expense') {
+                    $availableBalance += (float) $transaction->amount;
+                } elseif ($transaction->type === 'income') {
+                    $availableBalance -= (float) $transaction->amount;
+                }
+            }
+
+            if ((float) $validatedData['amount'] > $availableBalance) {
+                throw ValidationException::withMessages([
+                    'amount' => 'Saldo dompet tidak mencukupi untuk pengeluaran ini (Saldo saat ini: Rp ' . number_format(max(0, $availableBalance), 0, ',', '.') . ').',
+                ]);
+            }
+        }
 
         try {
             $transaction->update($validatedData);

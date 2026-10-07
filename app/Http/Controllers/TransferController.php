@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Transfer;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class TransferController extends Controller
@@ -105,6 +106,14 @@ class TransferController extends Controller
             'amount.min'             => 'Nominal transfer minimal Rp 1.',
         ]);
 
+        // Cek apakah saldo dompet asal mencukupi
+        $fromWallet = $request->user()->wallets()->findOrFail($validatedData['from_wallet_id']);
+        if ((float) $validatedData['amount'] > (float) $fromWallet->balance) {
+            throw ValidationException::withMessages([
+                'amount' => 'Saldo dompet asal tidak mencukupi (Saldo saat ini: Rp ' . number_format($fromWallet->balance, 0, ',', '.') . ').',
+            ]);
+        }
+
         try {
             $request->user()
                 ->transfers()
@@ -156,6 +165,19 @@ class TransferController extends Controller
             'to_wallet_id.different' => 'Dompet tujuan tidak boleh sama dengan dompet asal.',
             'amount.min'             => 'Nominal transfer minimal Rp 1.',
         ]);
+
+        // Cek apakah saldo dompet asal mencukupi (pertimbangkan nominal transfer lama jika dompet asal sama)
+        $fromWallet = $request->user()->wallets()->findOrFail($validatedData['from_wallet_id']);
+        $availableBalance = (float) $fromWallet->balance;
+        if ((int) $transfer->from_wallet_id === (int) $fromWallet->id) {
+            $availableBalance += (float) $transfer->amount;
+        }
+
+        if ((float) $validatedData['amount'] > $availableBalance) {
+            throw ValidationException::withMessages([
+                'amount' => 'Saldo dompet asal tidak mencukupi (Saldo saat ini: Rp ' . number_format($availableBalance, 0, ',', '.') . ').',
+            ]);
+        }
 
         try {
             $transfer->update($validatedData);

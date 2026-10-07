@@ -4,6 +4,7 @@ export type Wallet = {
     id: number;
     name: string;
     type: WalletType;
+    balance?: number;
     created_at: string;
     updated_at: string;
 };

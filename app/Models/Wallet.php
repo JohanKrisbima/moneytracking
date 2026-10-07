@@ -39,4 +39,21 @@ class Wallet extends Model
             'to_wallet_id'
         );
     }
+
+    protected $appends = ['balance'];
+
+    public function getBalanceAttribute(): float
+    {
+        $income = (float) $this->transactions()->where('type', 'income')->sum('amount');
+        $expense = (float) $this->transactions()->where('type', 'expense')->sum('amount');
+        $incomingTransfer = (float) $this->incomingTransfers()->sum('amount');
+        $outgoingTransfer = (float) $this->outgoingTransfers()->sum('amount');
+
+        return $income - $expense + $incomingTransfer - $outgoingTransfer;
+    }
+
+    public function totalBalance(): float
+    {
+        return $this->balance;
+    }
 }

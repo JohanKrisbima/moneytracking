@@ -9,6 +9,7 @@ import Select from "@/Components/UI/Select";
 import type { Category } from "@/Types/category";
 import type { Transaction, TransactionForm } from "@/Types/transaction";
 import type { Wallet } from "@/Types/wallet";
+import { formatRupiah } from "@/Utils/currency";
 
 type TransactionFormModalProps = {
     isOpen: boolean;
@@ -55,13 +56,18 @@ export default function TransactionFormModal({
             }));
     }, [categories, data.type]);
 
-    // Opsi Dompet
+    // Opsi Dompet beserta saldonya
     const walletOptions = useMemo(() => {
         return wallets.map((w) => ({
-            label: `${w.name} (${w.type.toUpperCase()})`,
+            label: `${w.name} (${w.type.toUpperCase()})${w.balance !== undefined ? ` • ${formatRupiah(w.balance)}` : ""}`,
             value: String(w.id),
         }));
     }, [wallets]);
+
+    // Dompet yang sedang aktif dipilih
+    const selectedWallet = useMemo(() => {
+        return wallets.find((w) => String(w.id) === String(data.wallet_id));
+    }, [wallets, data.wallet_id]);
 
     // Mengisi form jika Edit, atau reset form jika Tambah Baru
     useEffect(() => {
@@ -154,15 +160,36 @@ export default function TransactionFormModal({
                 />
 
                 {/* 3. Pilihan Dompet (Wallet) */}
-                <Select
-                    label="Sumber Dompet"
-                    name="wallet_id"
-                    value={String(data.wallet_id)}
-                    onChange={(e) => setData("wallet_id", e.target.value)}
-                    options={walletOptions}
-                    placeholder="Pilih dompet..."
-                    error={errors.wallet_id}
-                />
+                <div className="space-y-1">
+                    <Select
+                        label="Sumber Dompet"
+                        name="wallet_id"
+                        value={String(data.wallet_id)}
+                        onChange={(e) => setData("wallet_id", e.target.value)}
+                        options={walletOptions}
+                        placeholder="Pilih dompet..."
+                        error={errors.wallet_id}
+                    />
+                    {selectedWallet && selectedWallet.balance !== undefined && (
+                        <p className="text-xs text-[#6B6560]">
+                            Saldo tersedia:{" "}
+                            <span
+                                className={`font-semibold ${
+                                    data.type === "expense" && selectedWallet.balance <= 0
+                                        ? "text-red-500"
+                                        : "text-[#2B2724]"
+                                }`}
+                            >
+                                {formatRupiah(selectedWallet.balance)}
+                            </span>
+                            {data.type === "expense" && selectedWallet.balance <= 0 && (
+                                <span className="ml-1 text-xs text-red-500 font-medium">
+                                    (Saldo kosong, isi pemasukan dahulu!)
+                                </span>
+                            )}
+                        </p>
+                    )}
+                </div>
 
                 {/* 4. Pilihan Kategori (Dinamis sesuai tipe) */}
                 <Select

@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 import type { Wallet } from "@/Types/wallet";
+import { formatRupiah } from "@/Utils/currency";
 
 type WalletColumnsProps = {
     onEdit: (wallet: Wallet) => void;
@@ -135,6 +136,16 @@ export function walletColumns({
                     </span>
                 );
             },
+        },
+
+        {
+            accessorKey: "balance",
+            header: "Saldo Saat Ini",
+            cell: ({ row }) => (
+                <div className="font-medium text-sm text-[#2B2724]">
+                    {formatRupiah(row.original.balance ?? 0)}
+                </div>
+            ),
         },
 
         {

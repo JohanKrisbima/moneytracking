@@ -165,7 +165,8 @@ export default function Index() {
                         </div>
 
                         <p className="mt-2 text-sm text-[#6B6560]">
-                            Kelola sumber uang dan alokasi dana yang kamu miliki.
+                            Kelola sumber uang dan alokasi dana yang kamu
+                            miliki.
                         </p>
                     </div>
 
