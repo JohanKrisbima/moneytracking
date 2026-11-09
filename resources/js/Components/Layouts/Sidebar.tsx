@@ -72,8 +72,8 @@ const menuSections: MenuSection[] = [
         title: "ANALISIS",
         items: [
             {
-                label: "Ringkasan",
-                href: "/summary",
+                label: "Laporan & Analitik",
+                href: "/reports",
                 icon: BarChart3,
             },
         ],
